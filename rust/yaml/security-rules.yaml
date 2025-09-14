@@ -1,0 +1,306 @@
+rules:
+  # Memory Safety and Panic Prevention
+  - id: rs.no-unwrap
+    severity: MEDIUM
+    description: Avoid using unwrap() in production code
+    message: unwrap() can cause panic and should be handled gracefully
+    category: rust
+    patterns:
+      - pattern: $VAR.unwrap()
+      - pattern: $VAR.unwrap_or($DEFAULT)
+    remediation: Use proper error handling with match, if let, or ? operator
+    metadata:
+      cwe: ["CWE-754: Improper Check for Unusual or Exceptional Conditions"]
+      owasp: ["A10:2021 - Server-Side Request Forgery"]
+      confidence: HIGH
+
+  - id: rs.no-expect
+    severity: MEDIUM
+    description: Avoid using expect() in production code
+    message: expect() can cause panic and should be handled gracefully
+    category: rust
+    patterns:
+      - pattern: $VAR.expect(...)
+    remediation: Use proper error handling with match, if let, or ? operator
+    metadata:
+      cwe: ["CWE-754: Improper Check for Unusual or Exceptional Conditions"]
+      owasp: ["A10:2021 - Server-Side Request Forgery"]
+      confidence: HIGH
+
+  - id: rs.no-panic
+    severity: HIGH
+    description: Avoid using panic! macro in production code
+    message: panic! aborts the program and should be avoided in production
+    category: rust
+    patterns:
+      - pattern: panic!(...)
+      - pattern: panic!()
+    remediation: Use proper error handling and return Result or Option types
+    metadata:
+      cwe: ["CWE-754: Improper Check for Unusual or Exceptional Conditions"]
+      owasp: ["A10:2021 - Server-Side Request Forgery"]
+      confidence: HIGH
+
+  - id: rs.no-unreachable
+    severity: MEDIUM
+    description: Avoid using unreachable! macro
+    message: unreachable! can cause panic and indicates logic errors
+    category: rust
+    patterns:
+      - pattern: unreachable!(...)
+      - pattern: unreachable!()
+    remediation: Use proper control flow or handle all possible cases
+    metadata:
+      cwe: ["CWE-754: Improper Check for Unusual or Exceptional Conditions"]
+      owasp: ["A10:2021 - Server-Side Request Forgery"]
+      confidence: HIGH
+
+  # Unsafe Code
+  - id: rs.no-unsafe
+    severity: HIGH
+    description: Avoid using unsafe code blocks
+    message: unsafe code bypasses Rust's safety guarantees
+    category: rust
+    patterns:
+      - pattern: unsafe { ... }
+      - pattern: unsafe fn $FUNC(...)
+      - pattern: unsafe trait $TRAIT
+      - pattern: unsafe impl $TRAIT
+    remediation: Use safe alternatives or ensure proper safety documentation
+    metadata:
+      cwe: ["CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer"]
+      owasp: ["A06:2021 - Vulnerable and Outdated Components"]
+      confidence: HIGH
+
+  - id: rs.no-raw-pointers
+    severity: HIGH
+    description: Avoid using raw pointers
+    message: Raw pointers bypass Rust's safety guarantees
+    category: rust
+    patterns:
+      - pattern: '*const $TYPE'
+      - pattern: '*mut $TYPE'
+      - pattern: '$VAR as *const $TYPE'
+      - pattern: '$VAR as *mut $TYPE'
+    remediation: Use references, Box, Rc, or Arc instead
+    metadata:
+      cwe: ["CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer"]
+      owasp: ["A06:2021 - Vulnerable and Outdated Components"]
+      confidence: HIGH
+
+  # Cryptographic Security
+  - id: rs.insecure-hash-md5
+    severity: HIGH
+    description: Avoid using MD5 for cryptographic purposes
+    message: MD5 is cryptographically broken and should not be used for security
+    category: rust
+    patterns:
+      - pattern: md5::Md5::new()
+      - pattern: md2::Md2::new()
+      - pattern: md4::Md4::new()
+    remediation: Use SHA-256 or stronger hash functions
+    metadata:
+      cwe: ["CWE-327: Use of a Broken or Risky Cryptographic Algorithm"]
+      owasp: ["A02:2021 - Cryptographic Failures"]
+      confidence: HIGH
+
+  - id: rs.insecure-hash-sha1
+    severity: MEDIUM
+    description: Avoid using SHA-1 for cryptographic purposes
+    message: SHA-1 is cryptographically broken and should not be used for security
+    category: rust
+    patterns:
+      - pattern: sha1::Sha1::new()
+    remediation: Use SHA-256 or stronger hash functions
+    metadata:
+      cwe: ["CWE-327: Use of a Broken or Risky Cryptographic Algorithm"]
+      owasp: ["A02:2021 - Cryptographic Failures"]
+      confidence: HIGH
+
+  - id: rs.weak-random
+    severity: MEDIUM
+    description: Avoid using weak random number generators
+    message: Weak random number generators can be predictable
+    category: rust
+    patterns:
+      - pattern: rand::thread_rng().gen::<$TYPE>()
+      - pattern: rand::random::<$TYPE>()
+    remediation: Use cryptographically secure random number generators for security purposes
+    metadata:
+      cwe: ["CWE-330: Use of Insufficiently Random Values"]
+      owasp: ["A02:2021 - Cryptographic Failures"]
+      confidence: MEDIUM
+
+  # Memory Management
+  - id: rs.no-mem-forget
+    severity: HIGH
+    description: Avoid using std::mem::forget
+    message: mem::forget can lead to memory leaks and resource exhaustion
+    category: rust
+    patterns:
+      - pattern: std::mem::forget($VAR)
+      - pattern: mem::forget($VAR)
+    remediation: Use proper RAII patterns and let values be dropped naturally
+    metadata:
+      cwe: ["CWE-401: Missing Release of Memory after Effective Lifetime"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: HIGH
+
+  - id: rs.no-manual-drop
+    severity: MEDIUM
+    description: Avoid manual calls to std::mem::drop
+    message: Manual drop calls are usually unnecessary and can indicate design issues
+    category: rust
+    patterns:
+      - pattern: std::mem::drop($VAR)
+      - pattern: mem::drop($VAR)
+    remediation: Let values be dropped naturally at the end of their scope
+    metadata:
+      cwe: ["CWE-401: Missing Release of Memory after Effective Lifetime"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: MEDIUM
+
+  # Concurrency Safety
+  - id: rs.no-unsafe-sync
+    severity: HIGH
+    description: Avoid unsafe synchronization primitives
+    message: Unsafe synchronization can lead to data races
+    category: rust
+    patterns:
+      - pattern: std::sync::Mutex::new($VAR)
+      - pattern: std::sync::RwLock::new($VAR)
+    remediation: Use safe synchronization primitives and proper locking patterns
+    metadata:
+      cwe: ["CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: MEDIUM
+
+  - id: rs.no-raw-thread
+    severity: MEDIUM
+    description: Avoid using raw thread spawning
+    message: Raw thread spawning can lead to resource leaks
+    category: rust
+    patterns:
+      - pattern: std::thread::spawn(|| { ... })
+    remediation: Use thread pools or async/await patterns
+    metadata:
+      cwe: ["CWE-362: Concurrent Execution using Shared Resource with Improper Synchronization"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: MEDIUM
+
+  # Input Validation
+  - id: rs.no-unchecked-arithmetic
+    severity: MEDIUM
+    description: Avoid unchecked arithmetic operations
+    message: Unchecked arithmetic can lead to integer overflow/underflow
+    category: rust
+    patterns:
+      - pattern: $VAR.wrapping_add($OTHER)
+      - pattern: $VAR.wrapping_sub($OTHER)
+      - pattern: $VAR.wrapping_mul($OTHER)
+    remediation: Use checked arithmetic or proper overflow handling
+    metadata:
+      cwe: ["CWE-190: Integer Overflow or Wraparound"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: MEDIUM
+
+  # String and Buffer Safety
+  - id: rs.no-unsafe-string
+    severity: HIGH
+    description: Avoid unsafe string operations
+    message: Unsafe string operations can lead to buffer overflows
+    category: rust
+    patterns:
+      - pattern: String::from_raw_parts(...)
+      - pattern: std::str::from_utf8_unchecked(...)
+    remediation: Use safe string operations and proper UTF-8 validation
+    metadata:
+      cwe: ["CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer"]
+      owasp: ["A06:2021 - Vulnerable and Outdated Components"]
+      confidence: HIGH
+
+  # Debug and Development
+  - id: rs.todo-comment
+    severity: LOW
+    description: Remove TODO comments from production code
+    message: TODO comments should be resolved before production deployment
+    category: rust
+    patterns:
+      - pattern: // TODO
+      - pattern: // FIXME
+      - pattern: // XXX
+    remediation: Resolve TODO items or create proper issue tracking
+    metadata:
+      cwe: ["CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"]
+      owasp: ["A05:2021 - Security Misconfiguration"]
+      confidence: LOW
+
+  - id: rs.debug-print
+    severity: LOW
+    description: Remove debug print statements from production code
+    message: Debug print statements should not be present in production
+    category: rust
+    patterns:
+      - pattern: println!(...)
+      - pattern: eprintln!(...)
+      - pattern: dbg!(...)
+    remediation: Use proper logging framework or remove debug statements
+    metadata:
+      cwe: ["CWE-200: Exposure of Sensitive Information to an Unauthorized Actor"]
+      owasp: ["A05:2021 - Security Misconfiguration"]
+      confidence: LOW
+
+  # Error Handling
+  - id: rs.no-unwrap-in-error-handling
+    severity: MEDIUM
+    description: Avoid unwrap in error handling contexts
+    message: Error handling should be explicit and not use unwrap
+    category: rust
+    patterns:
+      - pattern-inside: |
+          fn $FUNC(...) -> Result<$TYPE, $ERROR> {
+            ...
+            $VAR.unwrap()
+            ...
+          }
+    remediation: Use proper error propagation with ? operator or match statements
+    metadata:
+      cwe: ["CWE-754: Improper Check for Unusual or Exceptional Conditions"]
+      owasp: ["A10:2021 - Server-Side Request Forgery"]
+      confidence: HIGH
+
+  # Performance and Resource Management
+  - id: rs.no-clone-in-loop
+    severity: MEDIUM
+    description: Avoid unnecessary cloning in loops
+    message: Unnecessary cloning in loops can cause performance issues
+    category: rust
+    patterns:
+      - pattern-inside: |
+          for $ITEM in $ITER {
+            ...
+            $ITEM.clone()
+            ...
+          }
+    remediation: Use references or move semantics where possible
+    metadata:
+      cwe: ["CWE-400: Uncontrolled Resource Consumption"]
+      owasp: ["A04:2021 - Insecure Design"]
+      confidence: MEDIUM
+
+  # Network and I/O Security
+  - id: rs.no-hardcoded-credentials
+    severity: HIGH
+    description: Avoid hardcoded credentials in source code
+    message: Hardcoded credentials are a security risk
+    category: rust
+    patterns:
+      - pattern: "password"
+      - pattern: "secret"
+      - pattern: "api_key"
+      - pattern: "token"
+    remediation: Use environment variables or secure configuration management
+    metadata:
+      cwe: ["CWE-798: Use of Hard-coded Credentials"]
+      owasp: ["A07:2021 - Identification and Authentication Failures"]
+      confidence: MEDIUM

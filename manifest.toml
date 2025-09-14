@@ -1,0 +1,7 @@
+name = "Official RootCause Rules"
+author = "RootCause Team"
+version = "1.0.0"
+origin = "https://github.com/rootcause/rules"
+git_url = "https://github.com/rootcause/rules.git"
+description = "Official security rules for RootCause SAST tool covering Python, Rust, Docker, YAML, and more"
+maintainer = "RootCause Security Team <contact@rootcause.dev>"

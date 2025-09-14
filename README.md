@@ -5,7 +5,7 @@
   
   **Official Security Rules for RootCause SAST**
   
-  [![Visit RootCause.sh](https://img.shields.io/badge/Visit-rootcause.sh-FFD700?style=for-the-badge&logo=web&logoColor=000000)](https://rootcause.sh)
+  [![Visit RootCause.sh](https://img.shields.io/badge/Visit-rootcause.sh-FFD700?style=for-the-badge&logo=web&logoColor=000000)](https://rootcause.sh) <br>
   [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
 </div>
 
