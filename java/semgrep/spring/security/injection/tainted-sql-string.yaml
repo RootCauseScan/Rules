@@ -1,5 +1,5 @@
 rules:
-  - id: tainted-sql-string
+  - id: java-tainted-sql-string
     languages:
       - java
     severity: ERROR

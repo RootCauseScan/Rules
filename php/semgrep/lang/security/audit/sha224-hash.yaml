@@ -1,5 +1,5 @@
 rules:
-- id: sha224-hash
+- id: php-sha224-hash
   pattern-either:
   - pattern: hash('sha224', ...);
   - pattern: hash('sha512/224', ...);
