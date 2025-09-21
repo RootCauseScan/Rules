@@ -17,7 +17,7 @@ rules:
   - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
   - pattern: $RESPONSE.set_cookie(...)
   fix-regex:
-    regex: (.*)\)
+    regex: (.*)\\)
     replacement: \1, samesite='Lax')
   message: >-
     Found a Pyramid cookie using an unsafe value for the samesite option.

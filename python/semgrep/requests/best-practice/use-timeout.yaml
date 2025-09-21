@@ -28,7 +28,7 @@ rules:
               - pattern: $SESSION.head(...)
               - pattern: $SESSION.patch(...)
     fix-regex:
-      regex: (.*)\)$
+      regex: (.*)\\)$
       replacement: \1, timeout=30)
     message: >-
       Detected a 'requests' call without a timeout set. By default, 'requests' calls

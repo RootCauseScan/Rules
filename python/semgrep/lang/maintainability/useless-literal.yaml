@@ -5,10 +5,14 @@ rules:
     severity: WARNING
     patterns:
       - pattern-either:
-          - pattern: |
-              {..., $X: $A, ..., $X: $B, ...}
-          - pattern: |
-              dict(..., ($X, $A), ..., ($X, $B), ...)
+          - pattern: "{..., $X: $A, ..., $X: $B, ...}"
+          - pattern: "dict(..., $PAIR1, ..., $PAIR2, ...)"
+      - metavariable-pattern:
+          metavariable: $PAIR1
+          pattern: ($X, $A)
+      - metavariable-pattern:
+          metavariable: $PAIR2
+          pattern: ($X, $B)
       - focus-metavariable: $X
     metadata:
       category: maintainability

@@ -11,7 +11,7 @@ rules:
       - pattern-not: pyramid.authentication.AuthTktAuthenticationPolicy(..., **$PARAMS)
       - pattern: pyramid.authentication.AuthTktAuthenticationPolicy(...)
   fix-regex:
-    regex: (.*)\)
+    regex: (.*)\\)
     replacement: \1, secure=True)
   message: >-
     Found a Pyramid Authentication Ticket cookie using an unsafe default for the secure option.

@@ -2,7 +2,13 @@ rules:
   - id: useless-literal-set
     patterns:
       - pattern: |
-          set(..., ($X, $A), ..., ($X, $B), ...)
+          set(..., $PAIR1, ..., $PAIR2, ...)
+      - metavariable-pattern:
+          metavariable: $PAIR1
+          pattern: ($X, $A)
+      - metavariable-pattern:
+          metavariable: $PAIR2
+          pattern: ($X, $B)
       - focus-metavariable: $X
     message: "`$X` is uselessly assigned twice inside the creation of the set"
     languages: [python]

@@ -17,7 +17,7 @@ rules:
   - pattern-not: $RESPONSE.set_cookie(..., **$PARAMS)
   - pattern: $RESPONSE.set_cookie(...)
   fix-regex:
-    regex: (.*)\)
+    regex: (.*)\\)
     replacement: \1, secure=True)
   message: >-
     Found a Pyramid cookie using an unsafe default for the secure option.
