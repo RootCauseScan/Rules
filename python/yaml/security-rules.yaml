@@ -5,6 +5,7 @@ rules:
     description: Avoid using eval() function with untrusted input
     message: Do not use eval() with untrusted input as it can lead to code injection
     category: python
+    languages: [python]
     pattern: "eval(...)"
     remediation: Use ast.literal_eval() or other safe alternatives
     metadata:
@@ -17,6 +18,7 @@ rules:
     description: Avoid using exec() function with untrusted input
     message: Do not use exec() with untrusted input as it can lead to code injection
     category: python
+    languages: [python]
     pattern: "exec(...)"
     remediation: Use safer alternatives or validate input thoroughly
     metadata:
@@ -30,6 +32,7 @@ rules:
     description: Avoid pickle.load() on untrusted data
     message: pickle.load() can execute arbitrary code during deserialization
     category: python
+    languages: [python]
     pattern: "pickle.load(...)"
     remediation: Use json.loads() or other safe deserialization methods
     metadata:
@@ -42,6 +45,7 @@ rules:
     description: Avoid pickle.loads() on untrusted data
     message: pickle.loads() can execute arbitrary code during deserialization
     category: python
+    languages: [python]
     pattern: "pickle.loads(...)"
     remediation: Use json.loads() or other safe deserialization methods
     metadata:
@@ -55,6 +59,7 @@ rules:
     description: Avoid using shell=True in subprocess calls
     message: Using shell=True can lead to command injection vulnerabilities
     category: python
+    languages: [python]
     patterns:
       - pattern: subprocess.run(..., shell=True, ...)
       - pattern: subprocess.call(..., shell=True, ...)
@@ -72,6 +77,7 @@ rules:
     description: Avoid yaml.load() on untrusted data
     message: yaml.load() can execute arbitrary code during deserialization
     category: python
+    languages: [python]
     pattern: "yaml.load(...)"
     remediation: Use yaml.safe_load() instead
     metadata:
@@ -85,6 +91,7 @@ rules:
     description: Avoid using insecure temporary file creation
     message: Using insecure temporary file creation can lead to race conditions
     category: python
+    languages: [python]
     patterns:
       - pattern: tempfile.mktemp(...)
       - pattern: os.tmpnam(...)
@@ -100,6 +107,7 @@ rules:
     description: Avoid disabling SSL verification in requests
     message: Disabling SSL verification can lead to man-in-the-middle attacks
     category: python
+    languages: [python]
     patterns:
       - pattern: requests.get(..., verify=False, ...)
       - pattern: requests.post(..., verify=False, ...)
@@ -118,6 +126,7 @@ rules:
     description: Avoid using MD5 for cryptographic purposes
     message: MD5 is cryptographically broken and should not be used for security purposes
     category: python
+    languages: [python]
     patterns:
       - pattern: hashlib.md5(...)
       - pattern: md5(...)
@@ -132,6 +141,7 @@ rules:
     description: Avoid using SHA-1 for cryptographic purposes
     message: SHA-1 is cryptographically broken and should not be used for security purposes
     category: python
+    languages: [python]
     patterns:
       - pattern: hashlib.sha1(...)
       - pattern: sha1(...)
@@ -147,6 +157,7 @@ rules:
     description: Ensure proper input validation in web applications
     message: Missing input validation can lead to various security vulnerabilities
     category: python
+    languages: [python]
     patterns:
       - pattern-inside: |
           def $FUNC($REQ, ...):
@@ -172,6 +183,7 @@ rules:
     description: Avoid path traversal vulnerabilities in file operations
     message: Path traversal can allow access to files outside intended directory
     category: python
+    languages: [python]
     patterns:
       - pattern: open($PATH, ...)
       - pattern: file($PATH, ...)
@@ -188,6 +200,7 @@ rules:
     description: Avoid exposing debug information in production
     message: Debug information should not be exposed in production environments
     category: python
+    languages: [python]
     patterns:
       - pattern: print($DEBUG_INFO)
       - pattern: logging.debug($DEBUG_INFO)
@@ -204,6 +217,7 @@ rules:
     description: Avoid SQL injection vulnerabilities
     message: String concatenation in SQL queries can lead to SQL injection
     category: python
+    languages: [python]
     patterns:
       - pattern: 'SELECT * FROM $TABLE WHERE $COLUMN = " + $VAR'
       - pattern: 'INSERT INTO $TABLE VALUES (" + $VAR + ")"'

@@ -26,6 +26,9 @@ rules:
       references:
       - https://owasp.org/Top10/A04_2021-Insecure_Design
     patterns:
+      - pattern-inside: |
+          require('express')
+          ...
       - pattern-either:
           - pattern-inside: |
               $SESSION = require('cookie-session');

@@ -34,6 +34,9 @@ rules:
       taint_unify_mvars: true
     pattern-sources:
       - patterns:
+          - pattern-inside: |
+              require('express')
+              ...
           - pattern-either:
               - pattern-inside: function ... ($REQ, ...) {...}
           - pattern-either:

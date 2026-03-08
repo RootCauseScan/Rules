@@ -1,5 +1,5 @@
 rules:
-- id: mysql-sqli
+- id: py.mysql-sqli
   languages:
   - python
   message: >-

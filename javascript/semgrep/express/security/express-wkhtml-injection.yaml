@@ -25,6 +25,9 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
+          - pattern-inside: |
+              require('express')
+              ...
           - pattern-either:
               - pattern-inside: function ... ($REQ, $RES) {...}
               - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
@@ -88,6 +91,9 @@ rules:
     mode: taint
     pattern-sources:
     - patterns:
+      - pattern-inside: |
+          require('express')
+          ...
       - pattern-either:
         - pattern-inside: function ... ($REQ, $RES) {...}
         - pattern-inside: function ... ($REQ, $RES, $NEXT) {...}
