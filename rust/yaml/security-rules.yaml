@@ -5,6 +5,7 @@ rules:
     description: Avoid using unwrap() in production code
     message: unwrap() can cause panic and should be handled gracefully
     category: rust
+    languages: [rust]
     patterns:
       - pattern: $VAR.unwrap()
       - pattern: $VAR.unwrap_or($DEFAULT)
@@ -19,6 +20,7 @@ rules:
     description: Avoid using expect() in production code
     message: expect() can cause panic and should be handled gracefully
     category: rust
+    languages: [rust]
     patterns:
       - pattern: $VAR.expect(...)
     remediation: Use proper error handling with match, if let, or ? operator
@@ -32,6 +34,7 @@ rules:
     description: Avoid using panic! macro in production code
     message: panic! aborts the program and should be avoided in production
     category: rust
+    languages: [rust]
     patterns:
       - pattern: panic!(...)
       - pattern: panic!()
@@ -46,6 +49,7 @@ rules:
     description: Avoid using unreachable! macro
     message: unreachable! can cause panic and indicates logic errors
     category: rust
+    languages: [rust]
     patterns:
       - pattern: unreachable!(...)
       - pattern: unreachable!()
@@ -61,6 +65,7 @@ rules:
     description: Avoid using unsafe code blocks
     message: unsafe code bypasses Rust's safety guarantees
     category: rust
+    languages: [rust]
     patterns:
       - pattern: unsafe { ... }
       - pattern: unsafe fn $FUNC(...)
@@ -77,6 +82,7 @@ rules:
     description: Avoid using raw pointers
     message: Raw pointers bypass Rust's safety guarantees
     category: rust
+    languages: [rust]
     patterns:
       - pattern: '*const $TYPE'
       - pattern: '*mut $TYPE'
@@ -94,6 +100,7 @@ rules:
     description: Avoid using MD5 for cryptographic purposes
     message: MD5 is cryptographically broken and should not be used for security
     category: rust
+    languages: [rust]
     patterns:
       - pattern: md5::Md5::new()
       - pattern: md2::Md2::new()
@@ -109,6 +116,7 @@ rules:
     description: Avoid using SHA-1 for cryptographic purposes
     message: SHA-1 is cryptographically broken and should not be used for security
     category: rust
+    languages: [rust]
     patterns:
       - pattern: sha1::Sha1::new()
     remediation: Use SHA-256 or stronger hash functions
@@ -122,6 +130,7 @@ rules:
     description: Avoid using weak random number generators
     message: Weak random number generators can be predictable
     category: rust
+    languages: [rust]
     patterns:
       - pattern: rand::thread_rng().gen::<$TYPE>()
       - pattern: rand::random::<$TYPE>()
@@ -137,6 +146,7 @@ rules:
     description: Avoid using std::mem::forget
     message: mem::forget can lead to memory leaks and resource exhaustion
     category: rust
+    languages: [rust]
     patterns:
       - pattern: std::mem::forget($VAR)
       - pattern: mem::forget($VAR)
@@ -151,6 +161,7 @@ rules:
     description: Avoid manual calls to std::mem::drop
     message: Manual drop calls are usually unnecessary and can indicate design issues
     category: rust
+    languages: [rust]
     patterns:
       - pattern: std::mem::drop($VAR)
       - pattern: mem::drop($VAR)
@@ -166,6 +177,7 @@ rules:
     description: Avoid unsafe synchronization primitives
     message: Unsafe synchronization can lead to data races
     category: rust
+    languages: [rust]
     patterns:
       - pattern: std::sync::Mutex::new($VAR)
       - pattern: std::sync::RwLock::new($VAR)
@@ -180,6 +192,7 @@ rules:
     description: Avoid using raw thread spawning
     message: Raw thread spawning can lead to resource leaks
     category: rust
+    languages: [rust]
     patterns:
       - pattern: std::thread::spawn(|| { ... })
     remediation: Use thread pools or async/await patterns
@@ -194,6 +207,7 @@ rules:
     description: Avoid unchecked arithmetic operations
     message: Unchecked arithmetic can lead to integer overflow/underflow
     category: rust
+    languages: [rust]
     patterns:
       - pattern: $VAR.wrapping_add($OTHER)
       - pattern: $VAR.wrapping_sub($OTHER)
@@ -210,6 +224,7 @@ rules:
     description: Avoid unsafe string operations
     message: Unsafe string operations can lead to buffer overflows
     category: rust
+    languages: [rust]
     patterns:
       - pattern: String::from_raw_parts(...)
       - pattern: std::str::from_utf8_unchecked(...)
@@ -225,6 +240,7 @@ rules:
     description: Remove TODO comments from production code
     message: TODO comments should be resolved before production deployment
     category: rust
+    languages: [rust]
     patterns:
       - pattern: // TODO
       - pattern: // FIXME
@@ -240,6 +256,7 @@ rules:
     description: Remove debug print statements from production code
     message: Debug print statements should not be present in production
     category: rust
+    languages: [rust]
     patterns:
       - pattern: println!(...)
       - pattern: eprintln!(...)
@@ -256,6 +273,7 @@ rules:
     description: Avoid unwrap in error handling contexts
     message: Error handling should be explicit and not use unwrap
     category: rust
+    languages: [rust]
     patterns:
       - pattern-inside: |
           fn $FUNC(...) -> Result<$TYPE, $ERROR> {
@@ -275,6 +293,7 @@ rules:
     description: Avoid unnecessary cloning in loops
     message: Unnecessary cloning in loops can cause performance issues
     category: rust
+    languages: [rust]
     patterns:
       - pattern-inside: |
           for $ITEM in $ITER {
@@ -294,6 +313,7 @@ rules:
     description: Avoid hardcoded credentials in source code
     message: Hardcoded credentials are a security risk
     category: rust
+    languages: [rust]
     patterns:
       - pattern: "password"
       - pattern: "secret"
