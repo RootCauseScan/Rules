@@ -1,0 +1,63 @@
+rules:
+- id: java-ssrf-resttemplate
+  languages:
+  - java
+  severity: ERROR
+  message: >-
+    User data flows into the URL of an outbound RestTemplate request. An
+    attacker could point this request at their own server (exfiltrating
+    cookies or authorization headers) or probe internal services that the
+    server running this code can reach. This is server-side request forgery
+    (SSRF). Do not allow arbitrary hosts: validate the target against an
+    allowlist, or hardcode the host so user data can only affect the path or
+    query parameters.
+  metadata:
+    cwe:
+    - 'CWE-918: Server-Side Request Forgery (SSRF)'
+    owasp:
+    - A10:2021 - Server-Side Request Forgery (SSRF)
+    references:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html
+    category: security
+    technology:
+    - java
+    - spring
+    cwe2021-top25: true
+    cwe2022-top25: true
+    subcategory:
+    - vuln
+    impact: MEDIUM
+    likelihood: MEDIUM
+    confidence: MEDIUM
+    interfile: true
+  options:
+    interfile: true
+  mode: taint
+  pattern-sources:
+  - patterns:
+    - pattern-either:
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ(...) $TYPE $SOURCE,...) {
+            ...
+          }
+      - pattern-inside: |
+          $METHODNAME(..., @$REQ $TYPE $SOURCE,...) {
+            ...
+          }
+    - metavariable-regex:
+        metavariable: $TYPE
+        regex: ^(?!(Integer|Long|Float|Double|Char|Boolean|int|long|float|double|char|boolean))
+    - metavariable-regex:
+        metavariable: $REQ
+        regex: (RequestBody|PathVariable|RequestParam|RequestHeader|CookieValue|ModelAttribute)
+    - focus-metavariable: $SOURCE
+  pattern-sinks:
+  - pattern-either:
+    - pattern: $REST.exchange($URL, ...)
+    - pattern: $REST.getForObject($URL, ...)
+    - pattern: $REST.getForEntity($URL, ...)
+    - pattern: $REST.postForObject($URL, ...)
+    - pattern: $REST.postForEntity($URL, ...)
+    - pattern: $REST.put($URL, ...)
+    - pattern: $REST.delete($URL, ...)
+    - pattern: new URL($URL)
