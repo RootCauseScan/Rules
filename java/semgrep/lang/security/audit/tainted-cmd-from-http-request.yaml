@@ -13,6 +13,9 @@ rules:
     - pattern-either:
       - pattern: |
           (HttpServletRequest $REQ)
+      - pattern: $REQ.getParameter(...)
+      - pattern: $REQ.getHeader(...)
+      - pattern: $REQ.getQueryString(...)
       - patterns:   # this pattern is a hack to get the rule to recognize `map` as tainted source when `cookie.getValue(user_input)` is used.
         - pattern-inside: |
             (javax.servlet.http.Cookie[] $COOKIES) = (HttpServletRequest $REQ).getCookies(...);
@@ -34,6 +37,12 @@ rules:
                     (Process $P) = (java.lang.Runtime $R).exec(...);
               - patterns:
                   - pattern: (java.lang.Runtime $R).exec($CMD, ...);
+                  - focus-metavariable: $CMD
+              - patterns:
+                  - pattern: Runtime.getRuntime().exec($CMD, ...);
+                  - focus-metavariable: $CMD
+              - patterns:
+                  - pattern: $RT.exec($CMD, ...);
                   - focus-metavariable: $CMD
               - patterns:
                   - pattern-either:
