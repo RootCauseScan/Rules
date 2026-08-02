@@ -1,0 +1,31 @@
+rules:
+  - id: js.sql-string-concat
+    message: >-
+      Manual SQL string construction detected. Prefer parameterized queries to
+      avoid SQL injection.
+    languages: [javascript, typescript]
+    severity: ERROR
+    metadata:
+      category: security
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+      owasp:
+        - A01:2017 - Injection
+        - A03:2021 - Injection
+      subcategory:
+        - vuln
+      confidence: MEDIUM
+      likelihood: MEDIUM
+      impact: HIGH
+    patterns:
+      - pattern-either:
+          - pattern: '"$SQLSTR" + ...'
+          - pattern: |
+              "$SQLSTR".concat(...)
+          - pattern: |
+              `$SQLSTR${...}...`
+      - metavariable-regex:
+          metavariable: $SQLSTR
+          regex: (?i).*\b(select|delete|insert|create|update|alter|drop)\b.*
+      - pattern-not-inside: |
+          console.$LOG(...)
